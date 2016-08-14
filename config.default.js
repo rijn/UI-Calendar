@@ -3,7 +3,12 @@
  */
 
 module.exports = {
-	netID: '',
-	password: '',
-	debug: false
+	debug: false,
+    mysql: {
+        host: '',
+        port: 0,
+        user: '',
+        password: '',
+        database: '',
+    }
 }

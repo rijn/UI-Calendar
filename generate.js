@@ -1,3 +1,4 @@
+const Q = require('q');
 
 var ical = require('ical-generator'),
     cal = ical({
@@ -26,7 +27,7 @@ Date.prototype.Format = function(fmt) { //author: meizz
     return fmt;
 }
 
-var generateICS = function(sharedObject) {
+module.exports = function(sharedObject) {
     var deferred = Q.defer();
 
     var arr = sharedObject.course;
@@ -51,8 +52,6 @@ var generateICS = function(sharedObject) {
         'FR': new Date(nowTime + 5 * oneDayLong).Format('yyyy-MM-dd')
     }
 
-    console.log(firstWeekday);
-
     for (var i = 0; i < arr.length; i++) {
         var temp = arr[i];
         for (var j = 0; j < temp[5].length; j++) {
@@ -72,7 +71,8 @@ var generateICS = function(sharedObject) {
         });
     }
 
-    console.log(cal.toString());
+    sharedObject.ics = cal.toString();
+    // console.log(cal.toString());
 
     // console.log(sharedObject.course);
     deferred.resolve(sharedObject);

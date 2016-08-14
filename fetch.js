@@ -61,7 +61,8 @@ var getCourses = function(netID, password) {
             req.end();
 
             req.on('error', (e) => {
-                console.error(e);
+            	deferred.reject(e);
+                // console.error(e);
             });
 
             return deferred.promise;
@@ -112,7 +113,8 @@ var getCourses = function(netID, password) {
             });
 
             req.on('error', (e) => {
-                console.log(`problem with request: ${e.message}`);
+            	deferred.reject(e);
+                // console.log(`problem with request: ${e.message}`);
             });
 
             // write data to request body
@@ -151,16 +153,16 @@ var getCourses = function(netID, password) {
 
                 res.on('data', (d) => {
                     data += d;
-                    process.stdout.write("Downloading " + data.length + " bytes ");
-                    for (var i = 0; i < 20; i++) {
-                        if (i / 20 < data.length / contentLength) {
-                            process.stdout.write("▓");
-                        } else {
-                            process.stdout.write("▓".gray);
-                        }
-                    }
-                    process.stdout.write("\r");
-                    process.stdout.write("\r");
+                    // process.stdout.write("Downloading " + data.length + " bytes ");
+                    // for (var i = 0; i < 20; i++) {
+                    //     if (i / 20 < data.length / contentLength) {
+                    //         process.stdout.write("▓");
+                    //     } else {
+                    //         process.stdout.write("▓".gray);
+                    //     }
+                    // }
+                    // process.stdout.write("\r");
+                    // process.stdout.write("\r");
                     // process.stdout.write(d);
                 });
 
@@ -177,7 +179,7 @@ var getCourses = function(netID, password) {
             req.end();
 
             req.on('error', (e) => {
-                console.error(e);
+                deferred.reject(e);
             });
 
             return deferred.promise;
@@ -267,7 +269,7 @@ var parseData = function(sharedObject) {
     return deferred.promise;
 }
 
-getCourses('yb3', 'Rijn_147268')
-    .then(parseData)
-    .then(generateICS)
-    .done();
+module.exports = function(netid, password, res) {
+	return getCourses(netid, password)
+	    .then(parseData)
+}

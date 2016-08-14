@@ -1,0 +1,28 @@
+{
+  "name": "ui-calendar",
+  "version": "1.0.0",
+  "description": "To fetch student calendar and generate ics file",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://rijn@github.com/rijn/UI-Calendar.git"
+  },
+  "author": "Rijn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rijn/UI-Calendar/issues"
+  },
+  "homepage": "https://github.com/rijn/UI-Calendar#readme",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "htmlparser2": "^3.9.1",
+    "https": "^1.0.0",
+    "ical-generator": "^0.2.7",
+    "mysql": "github:mysqljs/mysql",
+    "q": "^1.4.1",
+    "querystring": "^0.2.0"
+  }
+}

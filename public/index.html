@@ -1,1 +1,60 @@
-Hello World
+<html>
+
+<head>
+</head>
+
+<body>
+    <h2>UI-Calendar</h2>
+    <p>To fetch student calendar and generate ics link</p>
+    <p><a href="https://github.com/rijn/UI-Calendar">Open Source on GitHub</a></p>
+    <hr>
+    <label for="userName">NetID:</label>
+    <input value="" size="15" name="userName" type="text" id="userName">
+    <br/>
+    <br/>
+    <label for="password">Password:</label>
+    <input size="15" name="password" type="password" id="password">
+    <br/>
+    <br/>
+    <button id="fetch" name="Fetch" value="Fetch" onclick="window.sendRequest()">Fetch</button>
+    <br/>
+    <p id="status">ready</p>
+    <script type="text/javascript">
+    var XMLHttpReq;
+
+    function createXMLHttpRequest() {
+        try {
+            XMLHttpReq = new ActiveXObject("Msxml2.XMLHTTP");
+        } catch (E) {
+            try {
+                XMLHttpReq = new ActiveXObject("Microsoft.XMLHTTP");
+            } catch (E) {
+                XMLHttpReq = new XMLHttpRequest();
+            }
+        }
+
+    }
+
+    function processResponse() {
+    	console.log("received");
+        if (XMLHttpReq.readyState == 4) {
+            if (XMLHttpReq.status == 200) {
+                var text = XMLHttpReq.responseText;
+                if(text !== "ERROR") {
+                	text += "<br/>webcal://ui-calendar.rijnx.com/get/" + text;
+                }
+                document.getElementById('status').innerHTML = text;
+            }
+        }
+    }
+
+    var sendRequest = function() {
+    	var url = "http://ui-calendar.rijnx.com/save?netid=" + document.getElementById('userName').value + '&password=' + document.getElementById('password').value;
+        createXMLHttpRequest();
+        XMLHttpReq.open("get", url, true);
+        XMLHttpReq.onreadystatechange = processResponse;
+        XMLHttpReq.send(null);
+        document.getElementById('status').innerHTML = "pending...";
+    }
+    </script>
+</body>

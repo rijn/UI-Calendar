@@ -8,11 +8,19 @@ var md5 = require('md5');
 var config = util.getConfig();
 
 var mysql = require('mysql');
-var connection = mysql.createConnection(config.mysql);
+var connection = mysql.createPool(config.mysql);
+
+var connectPool = function(sharedObject) {
+    var deferred = Q.defer();
+    connection.getConnection(function(err, connection) {
+        if (err) deferred.reject(err);
+        deferred.resolve(sharedObject);
+    });
+    return deferred.promise;
+}
 
 var getConst = function(sharedObject) {
     var deferred = Q.defer();
-    connection.connect();
 
     connection.query('SELECT `name`, `value` FROM `const`', function(err, rows, fields) {
         if (err) deferred.reject(err);
@@ -43,6 +51,7 @@ app.get('/save', function(req, res) {
             }
             return sharedObject;
         })
+        .then(connectPool)
         .then(getConst)
         .then(function(sharedObject) {
             // console.log(sharedObject.ENV);
@@ -82,12 +91,12 @@ app.get('/save', function(req, res) {
             return deferred.promise;
         })
         .then(function(sharedObject) {
-            connection.end();
+            // connection.end();
             res.send(md5(req.query.netid + sharedObject.ENV.term));
         })
         .fail(function(error) {
             // console.log(error);
-            connection.end();
+            // connection.end();
             res.send('ERROR');
         });
 });
@@ -96,7 +105,8 @@ var generate = require('./generate.js');
 
 app.get('/get/:md5', function(req, res) {
     // res.send(req.params.md5);
-    getConst({})
+    connectPool({})
+    .then(getConst)
         .then(function(sharedObject) {
             // console.log(sharedObject.ENV);
             var deferred = Q.defer();
@@ -114,15 +124,15 @@ app.get('/get/:md5', function(req, res) {
         })
         .then(generate)
         .then(function(sharedObject) {
-        	connection.end();
-        	res.send(sharedObject.ics);
+            // connection.end();
+            res.send(sharedObject.ics);
         })
         .fail(function(error) {
-            connection.end();
+            // connection.end();
             res.send('ERROR');
         });
 });
 
-app.listen(3000, function() {
+app.listen(3006, function() {
     console.log('Example app listening on port 3000!');
 });

@@ -42,17 +42,17 @@ var getCourses = function(netID, password) {
 
             console.log('\nREQUEST'.request, options.hostname + options.path);
 
-            var req = https.request(options, (res) => {
+            var req = https.request(options, function(res) {
                 console.log('STATUS'.result, res.statusCode);
                 if (config.debug) {
                     console.log('HEADERS'.data, res.headers);
                 }
 
-                res.on('data', (d) => {
+                res.on('data', function(d) {
                     // process.stdout.write(d);
                 });
 
-                res.on('end', () => {
+                res.on('end', function(){
                     util.combineCookies(res.headers['set-cookie'], sharedObject);
                     // console.log('cookie : ', sharedObject.cookie);
                     deferred.resolve(sharedObject);
@@ -60,7 +60,7 @@ var getCourses = function(netID, password) {
             });
             req.end();
 
-            req.on('error', (e) => {
+            req.on('error', function(e) {
             	deferred.reject(e);
                 // console.error(e);
             });
@@ -95,24 +95,24 @@ var getCourses = function(netID, password) {
 
             console.log('\nREQUEST'.request, options.hostname + options.path);
 
-            var req = https.request(options, (res) => {
+            var req = https.request(options, function(res) {
                 console.log('STATUS'.result, res.statusCode);
                 if (config.debug) {
                     console.log('HEADERS'.data, res.headers);
                 }
 
                 res.setEncoding('utf8');
-                res.on('data', (chunk) => {
+                res.on('data', function(chunk) {
                     // console.log(`BODY: ${chunk}`);
                 });
-                res.on('end', () => {
+                res.on('end', function() {
                     util.combineCookies(res.headers['set-cookie'], sharedObject);
                     // console.log('No more data in response.')
                     deferred.resolve(sharedObject);
                 })
             });
 
-            req.on('error', (e) => {
+            req.on('error', function(e) {
             	deferred.reject(e);
                 // console.log(`problem with request: ${e.message}`);
             });
@@ -143,7 +143,7 @@ var getCourses = function(netID, password) {
 
             var data = '';
 
-            var req = https.request(options, (res) => {
+            var req = https.request(options, function(res) {
                 console.log('STATUS'.result, res.statusCode);
                 if (config.debug) {
                     console.log('HEADERS'.data, res.headers);
@@ -151,7 +151,7 @@ var getCourses = function(netID, password) {
 
                 var contentLength = res.headers['content-length'];
 
-                res.on('data', (d) => {
+                res.on('data', function(d) {
                     data += d;
                     // process.stdout.write("Downloading " + data.length + " bytes ");
                     // for (var i = 0; i < 20; i++) {
@@ -166,7 +166,7 @@ var getCourses = function(netID, password) {
                     // process.stdout.write(d);
                 });
 
-                res.on('end', () => {
+                res.on('end', function() {
                     util.combineCookies(res.headers['set-cookie'], sharedObject);
                     // console.log('DATA'.data, data.data);
                     sharedObject.courseRawData = data;
@@ -178,7 +178,7 @@ var getCourses = function(netID, password) {
             // req.write(postData);
             req.end();
 
-            req.on('error', (e) => {
+            req.on('error', function(e) {
                 deferred.reject(e);
             });
 

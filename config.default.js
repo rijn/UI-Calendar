@@ -10,5 +10,6 @@ module.exports = {
         user: '',
         password: '',
         database: '',
+        acquireTimeout:10000
     }
 }

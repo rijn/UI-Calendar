@@ -1,16 +1,5 @@
 const Q = require('q');
 
-var ical = require('ical-generator'),
-    cal = ical({
-        domain: 'rijnx.com',
-        name: 'UI',
-        prodId: { company: 'rijnx.com', product: 'UI Clandar' },
-        timezone: 'America/Chicago'
-    }).ttl(60 * 60 * 24);;
-
-// overwrite domain
-cal.domain('rijnx.com');
-
 Date.prototype.Format = function(fmt) { //author: meizz
     var o = {
         "M+": this.getMonth() + 1, //月份
@@ -28,7 +17,20 @@ Date.prototype.Format = function(fmt) { //author: meizz
 }
 
 module.exports = function(sharedObject) {
+
     var deferred = Q.defer();
+
+    var ical = require('ical-generator'),
+        cal = ical({
+            domain: 'rijnx.com',
+            name: 'UI',
+            prodId: { company: 'rijnx.com', product: 'UI Clandar' },
+            // timezone: 'America/Chicago'
+        }).ttl(60 * 60 * 24);;
+
+    // overwrite domain
+    cal.domain('rijnx.com');
+
 
     var arr = sharedObject.course;
 
@@ -40,7 +42,7 @@ module.exports = function(sharedObject) {
         'F': 'FR',
     }
 
-    var now = new Date('2016-08-22');
+    var now = new Date('2016-08-21');
     var nowTime = now.getTime();
     var oneDayLong = 24 * 60 * 60 * 1000;
 
@@ -60,9 +62,11 @@ module.exports = function(sharedObject) {
         cal.createEvent({
             start: new Date(firstWeekday[temp[5][0]] + ' ' + temp[2]),
             end: new Date(firstWeekday[temp[5][0]] + ' ' + temp[3]),
+            timezone: 'America/Chicago',
             summary: temp[0] + ' - ' + temp[1],
             description: temp[4],
             location: temp[4],
+            // floating: true,
             repeating: {
                 freq: 'WEEKLY', // required
                 until: new Date('2016-12-08'),

@@ -41,7 +41,7 @@
             if (XMLHttpReq.status == 200) {
                 var text = XMLHttpReq.responseText;
                 if(text !== "ERROR") {
-                	text += "<br/>webcal://ui-calendar.rijnx.com/get/" + text;
+                	text += "<br/><br/>Copy the follwing url to add the calendar<p>webcal://ui-calendar.rijnx.com/get/" + text + "</p>";
                 }
                 document.getElementById('status').innerHTML = text;
             }
